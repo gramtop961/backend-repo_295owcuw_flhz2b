@@ -116,6 +116,17 @@ def get_cart():
         raise HTTPException(status_code=500, detail=str(e))
 
 
+@app.post("/products", status_code=201)
+def create_product(product: Product):
+    """Create a new product document. Sizes are validated by schema."""
+    try:
+        doc = product.dict()
+        new_id = create_document("product", doc)
+        return {"id": new_id, "message": "Product created"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 @app.get("/seed")
 def seed_products():
     """Seed a couple of Y2K/Chromatic Opium inspired products if none exist"""
